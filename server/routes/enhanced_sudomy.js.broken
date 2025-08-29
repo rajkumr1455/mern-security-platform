@@ -1,0 +1,1943 @@
+const express = require('express');
+const logger = require('../utils/logger');
+
+const router = express.Router();
+
+// Import enhanced services
+const DNSAnalysisService = require('../services/DNSAnalysisService');
+const HTTPAnalysisService = require('../services/HTTPAnalysisService');
+const EnhancedEnumerationService = require('../services/EnhancedEnumerationService');
+const ComprehensiveReportingService = require('../services/ComprehensiveReportingService');
+
+// Phase 2 services
+const VisualIntelligenceService = require('../services/VisualIntelligenceService');
+const ThreatIntelligenceService = require('../services/ThreatIntelligenceService');
+const AdvancedPortScanService = require('../services/AdvancedPortScanService');
+
+// Phase 3 services
+const AutomationService = require('../services/AutomationService');
+const NotificationService = require('../services/NotificationService');
+const ExternalToolIntegrationService = require('../services/ExternalToolIntegrationService');
+const ConfigurationManagementService = require('../services/ConfigurationManagementService');
+
+// Initialize services
+const dnsAnalysis = new DNSAnalysisService();
+const httpAnalysis = new HTTPAnalysisService();
+const enhancedEnumeration = new EnhancedEnumerationService();
+const reportingService = new ComprehensiveReportingService();
+
+// Phase 2 service instances
+const visualIntelligence = new VisualIntelligenceService();
+const threatIntelligence = new ThreatIntelligenceService();
+const advancedPortScan = new AdvancedPortScanService();
+
+// Phase 3 service instances
+const automationService = new AutomationService();
+const notificationService = new NotificationService();
+const externalToolIntegration = new ExternalToolIntegrationService();
+const configurationManagement = new ConfigurationManagementService();
+
+// Enhanced Sudomy integration with comprehensive workflow
+// This extends the basic sudomy.js with advanced features
+
+/**;
+ * Main Enhanced Sudomy Scan Endpoint
+ * POST /api/recon/sudomy/enhanced/scan
+ */;
+router.post('/enhanced/scan', async (req, res) => {
+  try {
+    const { domain, options = {} } = req.body
+
+    if (!domain) {
+      return res.status(400).json({
+        success: false,
+        error: 'Domain is required'
+      });
+    }
+
+    logger.info(`🔍 [ENHANCED-SUDOMY] Starting enhanced scan for: ${domain}`);
+
+    const {
+      techniques = ['passive', 'active', 'permutation'],
+      includeValidation = true,
+      socialMedia = false,
+      wordlistSize = 'medium'
+    } = options
+
+    // Start enhanced enumeration
+    const enumerationResults = await enhancedEnumeration.enumerateSubdomains(domain, {
+      techniques,
+      wordlistSize,
+      includeValidation,
+      socialMedia
+    });
+
+    // Perform DNS analysis
+    const dnsResults = await dnsAnalysis.performComprehensiveAnalysis(domain);
+
+    // Perform HTTP analysis on discovered subdomains
+    const httpResults = {}
+    const subdomains = enumerationResults.all_subdomains.slice(0, 10); // Limit for demo
+
+    for (const subdomain of subdomains) {
+      try {
+        httpResults[subdomain] = await httpAnalysis.analyzeHTTPSecurity(`https://${subdomain}`);
+      } catch (error) {
+        logger.info(`⚠️ HTTP analysis failed for ${subdomain}: ${error.message}`);
+      }
+    }
+
+    const scanResults = {
+      scanId: `enhanced_sudomy_${Date.now()}`,
+      domain,
+      timestamp: new Date().toISOString(),
+      enumeration_results: enumerationResults,
+      dns_analysis: dnsResults,
+      http_analysis: httpResults,
+      summary: {
+        total_subdomains: enumerationResults.all_subdomains.length,
+        validated_subdomains: enumerationResults.validation_results?.valid_subdomains?.length || 0,
+        techniques_used: techniques,
+        scan_duration: '2-5 minutes'
+      }
+    }
+
+    res.json({
+      success: true,
+      data: scanResults
+    });
+
+  } catch (error) {
+    logger.error('❌ [ENHANCED-SUDOMY] Scan failed:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Phase 1: Enhanced comprehensive scan endpoint
+router.post('/comprehensive-scan', async (req, res) => {
+  try {
+    const { domain, options = {} } = req.body
+
+    if (!domain) {
+      return res.status(400).json({
+        success: false,
+        message: 'Domain is required'
+      });
+    }
+
+    const scanId = `enhanced_${domain}_${Date.now()}`;
+    logger.info(`🚀 [ENHANCED] Starting comprehensive scan for: ${domain}`);
+
+    // Initialize comprehensive scan results
+    const scanResults = {
+      scanId,
+      domain,
+      timestamp: new Date().toISOString(),
+      status: 'running',
+      phases: {
+        enumeration: { status: 'pending', progress: 0 },
+        dns_analysis: { status: 'pending', progress: 0 },
+        http_analysis: { status: 'pending', progress: 0 },
+        port_scanning: { status: 'pending', progress: 0 },
+        visual_intelligence: { status: 'pending', progress: 0 },
+        threat_intelligence: { status: 'pending', progress: 0 },
+        reporting: { status: 'pending', progress: 0 }
+      }
+    }
+
+    // Store initial scan state
+    activeScans[scanId] = scanResults
+
+    // Send immediate response
+    res.json({
+      success: true,
+      scanId,
+      message: 'Comprehensive scan initiated',
+      status: 'running'
+    });
+
+    // Start comprehensive scan asynchronously
+    performComprehensiveScan(scanId, domain, options);
+
+  } catch (error) {
+    logger.error('Comprehensive scan error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Comprehensive scan implementation
+async function performComprehensiveScan(scanId, domain, options) {
+  try {
+    const scanResults = activeScans[scanId]
+
+    // Phase 1: Enhanced Enumeration
+    logger.info(`🔍 [${scanId}] Starting enhanced enumeration...`);
+    scanResults.phases.enumeration.status = 'running';
+    scanResults.enumeration_results = await enhancedEnumeration.enumerateSubdomains(domain, options);
+    scanResults.phases.enumeration.status = 'completed';
+    scanResults.phases.enumeration.progress = 100;
+
+    // Phase 2: DNS Analysis
+    logger.info(`🌐 [${scanId}] Starting DNS analysis...`);
+    scanResults.phases.dns_analysis.status = 'running';
+    scanResults.dns_analysis = await dnsAnalysis.analyzeDNSRecords(domain);
+    scanResults.phases.dns_analysis.status = 'completed';
+    scanResults.phases.dns_analysis.progress = 100;
+
+    // Phase 3: HTTP Analysis for main domain and discovered subdomains
+    logger.info(`🔒 [${scanId}] Starting HTTP/HTTPS analysis...`);
+    scanResults.phases.http_analysis.status = 'running';
+
+    // Analyze main domain
+    const httpUrl = `https://${domain}`;
+    scanResults.http_analysis = await httpAnalysis.analyzeHTTP(httpUrl);
+
+    // Analyze key subdomains if discovered
+    if (scanResults.enumeration_results?.validation_results?.https_accessible?.length > 0) {
+      const keySubdomains = scanResults.enumeration_results.validation_results.https_accessible.slice(0, 5);
+      scanResults.subdomain_analysis = {}
+
+      for (const subdomain of keySubdomains) {
+        try {
+          scanResults.subdomain_analysis[subdomain] = await httpAnalysis.analyzeHTTP(`https://${subdomain}`);
+        } catch (error) {
+          logger.error(`HTTP analysis failed for ${subdomain}:`, error.message);
+        }
+      }
+    }
+
+    scanResults.phases.http_analysis.status = 'completed';
+    scanResults.phases.http_analysis.progress = 100;
+
+    // Phase 4: Advanced Port Scanning
+    logger.info(`🔍 [${scanId}] Starting advanced port scanning...`);
+    scanResults.phases.port_scanning.status = 'running';
+
+    const mainIP = scanResults.dns_analysis?.records?.A?.records?.[0]?.ip
+    const targetsToScan = [domain]
+    if (mainIP && mainIP !== domain) {
+      targetsToScan.push(mainIP);
+    }
+
+    scanResults.port_scan_results = await advancedPortScan.scanPorts(targetsToScan, {
+      scanType: options.portScanType || 'comprehensive',
+      includeUDP: options.includeUDP || false,
+      performServiceDetection: true,
+      performVulnScan: true
+    });
+
+    scanResults.phases.port_scanning.status = 'completed';
+    scanResults.phases.port_scanning.progress = 100;
+
+    // Phase 5: Visual Intelligence (Screenshot Analysis)
+    if (options.includeScreenshots !== false) {
+      logger.info(`📸 [${scanId}] Starting visual intelligence analysis...`);
+      scanResults.phases.visual_intelligence.status = 'running';
+
+      const urlsToScreenshot = []
+
+      // Add main domain URLs
+      urlsToScreenshot.push(`https://${domain}`);
+      urlsToScreenshot.push(`http://${domain}`);
+
+      // Add key subdomains
+      if (scanResults.enumeration_results?.validation_results?.https_accessible?.length > 0) {
+        const keySubdomains = scanResults.enumeration_results.validation_results.https_accessible.slice(0, 5);
+        keySubdomains.forEach(subdomain => {
+          urlsToScreenshot.push(`https://${subdomain}`);
+        });
+      }
+
+      scanResults.visual_intelligence_results = await visualIntelligence.captureScreenshots(urlsToScreenshot, {
+        viewport: { width: 1920, height: 1080 },
+        timeout: 30000
+      });
+
+      scanResults.phases.visual_intelligence.status = 'completed';
+      scanResults.phases.visual_intelligence.progress = 100;
+    } else {
+      scanResults.phases.visual_intelligence.status = 'skipped';
+      scanResults.phases.visual_intelligence.progress = 100;
+    }
+
+    // Phase 6: Threat Intelligence Analysis
+    logger.info(`🛡️ [${scanId}] Starting threat intelligence analysis...`);
+    scanResults.phases.threat_intelligence.status = 'running';
+
+    const threatsToAnalyze = [domain]
+    if (scanResults.enumeration_results?.all_subdomains) {
+      threatsToAnalyze.push(...scanResults.enumeration_results.all_subdomains.slice(0, 10));
+    }
+    if (mainIP) {
+      threatsToAnalyze.push(mainIP);
+    }
+
+    scanResults.threat_intelligence_results = await threatIntelligence.analyzeReputation(threatsToAnalyze);
+
+    scanResults.phases.threat_intelligence.status = 'completed';
+    scanResults.phases.threat_intelligence.progress = 100;
+
+    // Phase 7: Generate comprehensive report
+    logger.info(`📊 [${scanId}] Generating comprehensive report...`);
+    scanResults.phases.reporting.status = 'running';
+    scanResults.comprehensive_report = await reportingService.generateReport(scanResults, 'comprehensive', 'json');
+    scanResults.phases.reporting.status = 'completed';
+    scanResults.phases.reporting.progress = 100;
+
+    // Mark scan as completed
+    scanResults.status = 'completed';
+    scanResults.completed_at = new Date().toISOString();
+
+    logger.info(`✅ [${scanId}] Comprehensive scan completed successfully`);
+
+    // Add to scan history
+    scanHistory.push({
+      ...scanResults,
+      summary: generateScanSummary(scanResults)
+    });
+
+  } catch (error) {
+    logger.error(`❌ [${scanId}] Comprehensive scan failed:`, error);
+    const scanResults = activeScans[scanId]
+    scanResults.status = 'failed';
+    scanResults.error = error.message
+    scanResults.failed_at = new Date().toISOString();
+  }
+}
+
+function generateScanSummary(scanResults) {
+  return {
+    total_subdomains: scanResults.enumeration_results?.summary?.total_unique_subdomains || 0,
+    active_subdomains: scanResults.enumeration_results?.validation_results?.valid_subdomains?.length || 0,
+    dns_vulnerabilities: scanResults.dns_analysis?.security?.vulnerabilities?.length || 0,
+    ssl_vulnerabilities: scanResults.http_analysis?.ssl_analysis?.vulnerabilities?.length || 0,
+    open_ports: scanResults.port_scan_results?.summary?.total_open_ports || 0,
+    total_services: scanResults.port_scan_results?.summary?.total_services || 0,
+    port_vulnerabilities: scanResults.port_scan_results?.summary?.total_vulnerabilities || 0,
+    screenshots_captured: scanResults.visual_intelligence_results?.screenshots?.length || 0,
+    threat_indicators: scanResults.threat_intelligence_results?.threat_indicators?.length || 0,
+    high_risk_targets: scanResults.threat_intelligence_results?.risk_assessment?.high_risk_targets?.length || 0,
+    security_score: scanResults.comprehensive_report?.data?.executive_summary?.overview?.key_findings?.security_score || 0,
+    risk_level: scanResults.comprehensive_report?.data?.metadata?.risk_level || 'Unknown'
+  }
+}
+
+// Get comprehensive scan progress
+router.get('/comprehensive/:scanId/progress', async (req, res) => {
+  try {
+    const { scanId } = req.params
+    const scanResults = activeScans[scanId]
+
+    if (!scanResults) {
+      return res.status(404).json({
+        success: false,
+        message: 'Scan not found'
+      });
+    }
+
+    // Calculate overall progress
+    const phases = Object.values(scanResults.phases);
+    const totalProgress = phases.reduce((sum, phase) => sum + phase.progress, 0);
+    const overallProgress = Math.round(totalProgress / phases.length);
+
+    res.json({
+      success: true,
+      scanId,
+      status: scanResults.status,
+      overall_progress: overallProgress,
+      phases: scanResults.phases,
+      current_phase: getCurrentPhase(scanResults.phases),
+      summary: scanResults.status === 'completed' ? generateScanSummary(scanResults) : null
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+function getCurrentPhase(phases) {
+  const phaseNames = Object.keys(phases);
+  for (const phaseName of phaseNames) {
+    if (phases[phaseName].status === 'running') {
+      return phaseName
+    }
+    if (phases[phaseName].status === 'pending') {
+      return phaseName
+    }
+  }
+  return 'completed';
+}
+
+// Get comprehensive scan results
+router.get('/comprehensive/:scanId/results', async (req, res) => {
+  try {
+    const { scanId } = req.params
+    const scanResults = activeScans[scanId]
+
+    if (!scanResults) {
+      return res.status(404).json({
+        success: false,
+        message: 'Scan not found'
+      });
+    }
+
+    if (scanResults.status !== 'completed') {
+      return res.status(400).json({
+        success: false,
+        message: 'Scan not completed yet'
+      });
+    }
+
+    res.json({
+      success: true,
+      scanId,
+      results: {
+        metadata: {
+          domain: scanResults.domain,
+          scan_duration: calculateDuration(scanResults),
+          completed_at: scanResults.completed_at
+        },
+        enumeration: scanResults.enumeration_results,
+        dns_analysis: scanResults.dns_analysis,
+        http_analysis: scanResults.http_analysis,
+        subdomain_analysis: scanResults.subdomain_analysis,
+        port_scan_results: scanResults.port_scan_results,
+        visual_intelligence: scanResults.visual_intelligence_results,
+        threat_intelligence: scanResults.threat_intelligence_results,
+        comprehensive_report: scanResults.comprehensive_report,
+        summary: generateScanSummary(scanResults)
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+function calculateDuration(scanResults) {
+  if (scanResults.timestamp && scanResults.completed_at) {
+    const start = new Date(scanResults.timestamp);
+    const end = new Date(scanResults.completed_at);
+    return Math.round((end - start) / 1000); // seconds
+  }
+  return 0;
+}
+
+// Export comprehensive report in different formats
+router.get('/comprehensive/:scanId/report/:format', async (req, res) => {
+  try {
+    const { scanId, format } = req.params
+    const scanResults = activeScans[scanId]
+
+    if (!scanResults) {
+      return res.status(404).json({
+        success: false,
+        message: 'Scan not found'
+      });
+    }
+
+    if (scanResults.status !== 'completed') {
+      return res.status(400).json({
+        success: false,
+        message: 'Scan not completed yet'
+      });
+    }
+
+    // Generate report in requested format
+    const report = await reportingService.generateReport(scanResults, 'comprehensive', format);
+
+    // Set appropriate headers based on format
+    switch (format.toLowerCase()) {
+      case 'json':
+        res.setHeader('Content-Type', 'application/json');
+        break
+      case 'csv':
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename='${report.download_filename}'`);
+        break
+      case 'html':
+        res.setHeader('Content-Type', 'text/html');
+        break
+      case 'pdf':
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename='${report.download_filename}'`);
+        break
+    }
+
+    res.json({
+      success: true,
+      format: report.format,
+      filename: report.download_filename,
+      data: report.data
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Phase 2: Individual service endpoints
+
+// Visual Intelligence endpoints
+router.post('/visual-intelligence/screenshots', async (req, res) => {
+  try {
+    const { urls, options = {} } = req.body
+
+    if (!urls || !Array.isArray(urls)) {
+      return res.status(400).json({
+        success: false,
+        message: 'URLs array is required'
+      });
+    }
+
+    const results = await visualIntelligence.captureScreenshots(urls, options);
+
+    res.json({
+      success: true,
+      results
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/visual-intelligence/screenshot/:filename', async (req, res) => {
+  try {
+    const { filename } = req.params
+    const screenshot = await visualIntelligence.getScreenshot(filename);
+
+    res.setHeader('Content-Type', 'image/png');
+    res.send(screenshot);
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Threat Intelligence endpoints
+router.post('/threat-intelligence/analyze', async (req, res) => {
+  try {
+    const { targets } = req.body
+
+    if (!targets || !Array.isArray(targets)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Targets array is required'
+      });
+    }
+
+    const results = await threatIntelligence.analyzeReputation(targets);
+
+    res.json({
+      success: true,
+      results
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/threat-intelligence/add-indicator', async (req, res) => {
+  try {
+    const { indicator, type, source } = req.body
+
+    if (!indicator || !type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Indicator and type are required'
+      });
+    }
+
+    const result = await threatIntelligence.addThreatIndicator(indicator, type, source);
+
+    res.json({
+      success: true,
+      result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/threat-intelligence/stats', async (req, res) => {
+  try {
+    const stats = threatIntelligence.getThreatFeedStats();
+
+    res.json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Advanced Port Scanning endpoints
+router.post('/port-scan/scan', async (req, res) => {
+  try {
+    const { targets, options = {} } = req.body
+
+    if (!targets) {
+      return res.status(400).json({
+        success: false,
+        message: 'Targets are required'
+      });
+    }
+
+    const results = await advancedPortScan.scanPorts(targets, options);
+
+    res.json({
+      success: true,
+      results
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Enhanced Analytics and Trending endpoints
+router.get('/analytics/scan-trends', async (req, res) => {
+  try {
+    const trends = generateScanTrends();
+
+    res.json({
+      success: true,
+      trends
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/analytics/threat-trends', async (req, res) => {
+  try {
+    const threatTrends = generateThreatTrends();
+
+    res.json({
+      success: true,
+      trends: threatTrends
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Helper functions for analytics
+function generateScanTrends() {
+  const trends = {
+    daily_scans: [],
+    vulnerability_trends: [],
+    service_distribution: {},
+    risk_level_trends: []
+  }
+
+  // Generate last 30 days of data
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+
+    trends.daily_scans.push({
+      date: date.toISOString().split('T')[0],
+      scans: Math.floor(Math.random() * 20) + 5,
+      vulnerabilities: Math.floor(Math.random() * 50) + 10
+    });
+
+    trends.vulnerability_trends.push({
+      date: date.toISOString().split('T')[0],
+      critical: Math.floor(Math.random() * 5),
+      high: Math.floor(Math.random() * 10) + 2,
+      medium: Math.floor(Math.random() * 15) + 5,
+      low: Math.floor(Math.random() * 20) + 10
+    });
+  }
+
+  // Service distribution
+  trends.service_distribution = {
+    'HTTP': 45,
+    'HTTPS': 40,
+    'SSH': 25,
+    'DNS': 20,
+    'FTP': 8,
+    'SMTP': 12,
+    'MySQL': 6,
+    'Other': 15
+  }
+
+  return trends
+}
+
+function generateThreatTrends() {
+  const trends = {
+    threat_indicators_over_time: [],
+    threat_categories: {},
+    geographic_distribution: {},
+    risk_assessment_trends: []
+  }
+
+  // Generate threat indicators over time
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+
+    trends.threat_indicators_over_time.push({
+      date: date.toISOString().split('T')[0],
+      new_threats: Math.floor(Math.random() * 10) + 1,
+      high_confidence: Math.floor(Math.random() * 5),
+      medium_confidence: Math.floor(Math.random() * 8) + 2
+    });
+  }
+
+  // Threat categories
+  trends.threat_categories = {
+    'Malware': 35,
+    'Phishing': 28,
+    'Botnet': 15,
+    'Spam': 12,
+    'APT': 6,
+    'Other': 4
+  }
+
+  // Geographic distribution
+  trends.geographic_distribution = {
+    'US': 25,
+    'CN': 18,
+    'RU': 15,
+    'DE': 8,
+    'FR': 6,
+    'UK': 5,
+    'Other': 23
+  }
+
+  return trends
+}
+
+// Phase 3: Automation and Configuration endpoints
+
+// Automation endpoints
+router.post('/automation/schedule', async (req, res) => {
+  try {
+    const scheduleConfig = req.body
+
+    if (!scheduleConfig.targets || !scheduleConfig.cronExpression) {
+      return res.status(400).json({
+        success: false,
+        message: 'Targets and cron expression are required'
+      });
+    }
+
+    const result = await automationService.createScheduledScan(scheduleConfig);
+
+    res.json({
+      success: true,
+      result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/automation/schedules', async (req, res) => {
+  try {
+    const schedules = automationService.getScheduledScans();
+
+    res.json({
+      success: true,
+      schedules
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.put('/automation/schedule/:scheduleId', async (req, res) => {
+  try {
+    const { scheduleId } = req.params
+    const updates = req.body
+
+    const schedule = await automationService.updateScheduledScan(scheduleId, updates);
+
+    res.json({
+      success: true,
+      schedule
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.delete('/automation/schedule/:scheduleId', async (req, res) => {
+  try {
+    const { scheduleId } = req.params
+
+    await automationService.deleteScheduledScan(scheduleId);
+
+    res.json({
+      success: true,
+      message: 'Schedule deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/automation/workflow', async (req, res) => {
+  try {
+    const workflowConfig = req.body
+
+    const result = await automationService.createWorkflow(workflowConfig);
+
+    res.json({
+      success: true,
+      result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/automation/workflow/:workflowId/execute', async (req, res) => {
+  try {
+    const { workflowId } = req.params
+    const context = req.body.context || {}
+
+    const execution = await automationService.executeWorkflow(workflowId, context);
+
+    res.json({
+      success: true,
+      execution
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Notification endpoints
+router.post('/notifications/send', async (req, res) => {
+  try {
+    const { type, channel, data, options } = req.body
+
+    if (!type || !channel || !data) {
+      return res.status(400).json({
+        success: false,
+        message: 'Type, channel, and data are required'
+      });
+    }
+
+    const notification = await notificationService.sendNotification(type, channel, data, options);
+
+    res.json({
+      success: true,
+      notification
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/notifications/configure', async (req, res) => {
+  try {
+    const { channelType, config } = req.body
+
+    if (!channelType || !config) {
+      return res.status(400).json({
+        success: false,
+        message: 'Channel type and config are required'
+      });
+    }
+
+    const channelConfig = await notificationService.configureChannel(channelType, config);
+
+    res.json({
+      success: true,
+      channel_config: channelConfig
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/notifications/rule', async (req, res) => {
+  try {
+    const ruleConfig = req.body
+
+    const rule = await notificationService.createNotificationRule(ruleConfig);
+
+    res.json({
+      success: true,
+      rule
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/notifications/history', async (req, res) => {
+  try {
+    const filters = req.query
+    const history = notificationService.getNotificationHistory(filters);
+
+    res.json({
+      success: true,
+      history
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/notifications/stats', async (req, res) => {
+  try {
+    const stats = notificationService.getNotificationStats();
+
+    res.json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// External Tool Integration endpoints
+router.post('/external-tools/execute', async (req, res) => {
+  try {
+    const { tool, targets, options } = req.body
+
+    if (!tool || !targets) {
+      return res.status(400).json({
+        success: false,
+        message: 'Tool and targets are required'
+      });
+    }
+
+    const execution = await externalToolIntegration.executeExternalTool(tool, targets, options);
+
+    res.json({
+      success: true,
+      execution
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/external-tools/status', async (req, res) => {
+  try {
+    const status = await externalToolIntegration.getToolsStatus();
+
+    res.json({
+      success: true,
+      tools_status: status
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/external-tools/siem', async (req, res) => {
+  try {
+    const { siemType, eventData } = req.body
+
+    if (!siemType || !eventData) {
+      return res.status(400).json({
+        success: false,
+        message: 'SIEM type and event data are required'
+      });
+    }
+
+    const integration = await externalToolIntegration.integrateSIEM(siemType, eventData);
+
+    res.json({
+      success: true,
+      integration
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/external-tools/stats', async (req, res) => {
+  try {
+    const stats = externalToolIntegration.getIntegrationStats();
+
+    res.json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Configuration Management endpoints
+router.post('/config/scan-profile', async (req, res) => {
+  try {
+    const profileData = req.body
+
+    const profile = await configurationManagement.createScanProfile(profileData);
+
+    res.json({
+      success: true,
+      profile
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/config/scan-profiles', async (req, res) => {
+  try {
+    const profiles = configurationManagement.getAllScanProfiles();
+
+    res.json({
+      success: true,
+      profiles
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.put('/config/scan-profile/:profileId', async (req, res) => {
+  try {
+    const { profileId } = req.params
+    const updates = req.body
+
+    const profile = await configurationManagement.updateScanProfile(profileId, updates);
+
+    res.json({
+      success: true,
+      profile
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/config/detection-rule', async (req, res) => {
+  try {
+    const ruleData = req.body
+
+    const rule = await configurationManagement.createDetectionRule(ruleData);
+
+    res.json({
+      success: true,
+      rule
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/config/detection-rules', async (req, res) => {
+  try {
+    const rules = configurationManagement.getAllDetectionRules();
+
+    res.json({
+      success: true,
+      rules
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/config/exclusion-list', async (req, res) => {
+  try {
+    const listData = req.body
+
+    const exclusionList = await configurationManagement.createExclusionList(listData);
+
+    res.json({
+      success: true,
+      exclusion_list: exclusionList
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/config/exclusion-lists', async (req, res) => {
+  try {
+    const lists = configurationManagement.getAllExclusionLists();
+
+    res.json({
+      success: true,
+      exclusion_lists: lists
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/config/check-exclusion', async (req, res) => {
+  try {
+    const { target, targetType } = req.body
+
+    if (!target) {
+      return res.status(400).json({
+        success: false,
+        message: 'Target is required'
+      });
+    }
+
+    const result = configurationManagement.shouldExcludeTarget(target, targetType);
+
+    res.json({
+      success: true,
+      result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/config/export', async (req, res) => {
+  try {
+    const { type = 'all' } = req.query
+
+    const exportData = await configurationManagement.exportConfiguration(type);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename='sudomy-config-${Date.now()}.json'`);
+
+    res.json({
+      success: true,
+      export_data: exportData
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.post('/config/import', async (req, res) => {
+  try {
+    const { importData, options = {} } = req.body
+
+    if (!importData) {
+      return res.status(400).json({
+        success: false,
+        message: 'Import data is required'
+      });
+    }
+
+    const result = await configurationManagement.importConfiguration(importData, options);
+
+    res.json({
+      success: true,
+      import_result: result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/config/stats', async (req, res) => {
+  try {
+    const stats = configurationManagement.getConfigurationStats();
+
+    res.json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// In-memory storage for demo purposes (in production, use a database)
+let activeScans = {}
+let scanHistory = []
+let reconResults = {}
+let scanProfiles = {}
+
+// Advanced Sudomy scan configuration
+const SUDOMY_TECHNIQUES = {
+  passive: {
+    certificate_transparency: {
+      name: 'Certificate Transparency',
+      description: 'Extract subdomains from CT logs',
+      tools: ['crt.sh', 'Censys', 'Shodan'],
+      enabled: true
+    },
+    dns_databases: {
+      name: 'DNS Databases',
+      description: 'Query public DNS databases',
+      tools: ['DNSdumpster', 'SecurityTrails', 'VirusTotal'],
+      enabled: true
+    },
+    search_engines: {
+      name: 'Search Engine Enumeration',
+      description: 'Extract subdomains from search engines',
+      tools: ['Google', 'Bing', 'DuckDuckGo'],
+      enabled: true
+    },
+    social_media: {
+      name: 'Social Media Intelligence',
+      description: 'Extract information from social platforms',
+      tools: ['GitHub', 'Twitter', 'LinkedIn'],
+      enabled: false
+    }
+  },
+  active: {
+    dns_bruteforce: {
+      name: 'DNS Brute Force',
+      description: 'Brute force subdomains using wordlists',
+      tools: ['Subfinder', 'Amass', 'Sublist3r'],
+      enabled: true
+    },
+    zone_transfer: {
+      name: 'DNS Zone Transfer',
+      description: 'Attempt DNS zone transfers',
+      tools: ['dig', 'nslookup', 'host'],
+      enabled: true
+    },
+    reverse_dns: {
+      name: 'Reverse DNS Lookup',
+      description: 'Reverse DNS enumeration',
+      tools: ['dnsrecon', 'fierce'],
+      enabled: true
+    },
+    permutation: {
+      name: 'Domain Permutation',
+      description: 'Generate domain permutations',
+      tools: ['altdns', 'dnsgen'],
+      enabled: false
+    }
+  },
+  validation: {
+    dns_resolution: {
+      name: 'DNS Resolution',
+      description: 'Validate subdomain resolution',
+      tools: ['massdns', 'puredns'],
+      enabled: true
+    },
+    http_probing: {
+      name: 'HTTP Probing',
+      description: 'Check HTTP/HTTPS availability',
+      tools: ['httpx', 'httprobe'],
+      enabled: true
+    },
+    port_scanning: {
+      name: 'Port Scanning',
+      description: 'Scan for open ports',
+      tools: ['nmap', 'masscan'],
+      enabled: true
+    },
+    screenshot: {
+      name: 'Screenshot Capture',
+      description: 'Capture website screenshots',
+      tools: ['aquatone', 'gowitness'],
+      enabled: true
+    }
+  }
+}
+
+// Enhanced scan phases with detailed sub-phases
+const ENHANCED_SCAN_PHASES = [
+  {
+    name: '🔧 Initialization & Configuration',
+    subphases: [
+      'Loading scan profile',
+      'Validating target domain',
+      'Initializing tools and APIs',
+      'Setting up output directories'
+    ]
+  },
+  {
+    name: '🔍 Passive Subdomain Enumeration',
+    subphases: [
+      'Certificate Transparency logs',
+      'DNS database queries',
+      'Search engine enumeration',
+      'Social media intelligence'
+    ]
+  },
+  {
+    name: '⚡ Active Subdomain Discovery',
+    subphases: [
+      'DNS brute force attack',
+      'Zone transfer attempts',
+      'Reverse DNS lookups',
+      'Domain permutation generation'
+    ]
+  },
+  {
+    name: '✅ Subdomain Validation',
+    subphases: [
+      'DNS resolution verification',
+      'HTTP/HTTPS probing',
+      'Wildcard detection',
+      'Duplicate removal'
+    ]
+  },
+  {
+    name: '🌐 Web Technology Analysis',
+    subphases: [
+      'HTTP header analysis',
+      'Technology fingerprinting',
+      'SSL/TLS assessment',
+      'Security header analysis'
+    ]
+  },
+  {
+    name: '🔒 Security Assessment',
+    subphases: [
+      'Port scanning',
+      'Service detection',
+      'Vulnerability scanning',
+      'Threat intelligence correlation'
+    ]
+  },
+  {
+    name: '📸 Visual Intelligence',
+    subphases: [
+      'Screenshot capture',
+      'Visual similarity analysis',
+      'Content analysis',
+      'Technology identification'
+    ]
+  },
+  {
+    name: '📊 Analysis & Reporting',
+    subphases: [
+      'Data correlation',
+      'Risk assessment',
+      'Report generation',
+      'Result storage'
+    ]
+  }
+]
+
+// Get enhanced scan techniques
+router.get('/techniques', async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      techniques: SUDOMY_TECHNIQUES,
+      total_techniques: Object.keys(SUDOMY_TECHNIQUES.passive).length +
+                       Object.keys(SUDOMY_TECHNIQUES.active).length +
+                       Object.keys(SUDOMY_TECHNIQUES.validation).length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch techniques'
+    });
+  }
+});
+
+// Get scan profiles
+router.get('/profiles', async (req, res) => {
+  try {
+    const defaultProfiles = {
+      quick: {
+        name: 'Quick Scan',
+        description: 'Fast subdomain enumeration with basic validation',
+        techniques: ['certificate_transparency', 'dns_databases', 'dns_resolution'],
+        estimated_time: '2-5 minutes'
+      },
+      comprehensive: {
+        name: 'Comprehensive Scan',
+        description: 'Full subdomain enumeration with all techniques',
+        techniques: Object.keys(SUDOMY_TECHNIQUES.passive).concat(
+          Object.keys(SUDOMY_TECHNIQUES.active),
+          Object.keys(SUDOMY_TECHNIQUES.validation)
+        ),
+        estimated_time: '15-30 minutes'
+      },
+      stealth: {
+        name: 'Stealth Scan',
+        description: 'Passive-only enumeration to avoid detection',
+        techniques: Object.keys(SUDOMY_TECHNIQUES.passive),
+        estimated_time: '5-10 minutes'
+      },
+      aggressive: {
+        name: 'Aggressive Scan',
+        description: 'All techniques including active enumeration',
+        techniques: Object.keys(SUDOMY_TECHNIQUES.active).concat(
+          Object.keys(SUDOMY_TECHNIQUES.validation)
+        ),
+        estimated_time: '20-45 minutes'
+      }
+    }
+
+    res.json({
+      success: true,
+      profiles: { ...defaultProfiles, ...scanProfiles },
+      total: Object.keys(defaultProfiles).length + Object.keys(scanProfiles).length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch scan profiles'
+    });
+  }
+});
+
+// Start enhanced Sudomy scan with profile
+router.post('/enhanced/start', async (req, res) => {
+  try {
+    const { domain, target, profile = 'comprehensive', techniques = [], options = {} } = req.body
+    const targetDomain = domain || target
+
+    if (!targetDomain || !targetDomain.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Domain is required'
+      });
+    }
+
+    const cleanDomain = targetDomain.trim();
+    const scanId = `enhanced_sudomy_${cleanDomain}_${Date.now()}`;
+
+    logger.info(`\n🚀 [ENHANCED-SUDOMY] ==========================================`);
+    logger.info(`🔍 [ENHANCED-SUDOMY] Starting enhanced scan for: ${cleanDomain}`);
+    logger.info(`📋 [ENHANCED-SUDOMY] Profile: ${profile}`);
+    logger.info(`🛠️ [ENHANCED-SUDOMY] Techniques: ${techniques.length || 'default'}`);
+    logger.info(`🚀 [ENHANCED-SUDOMY] ==========================================\n`);
+
+    // Validate domain format
+    const domainPattern = /^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$/;
+    if (!domainPattern.test(cleanDomain)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid domain format'
+      });
+    }
+
+    // Add to active scans with enhanced configuration
+    activeScans[scanId] = {
+      id: scanId,
+      type: 'enhanced_sudomy',
+      target: cleanDomain,
+      profile: profile,
+      techniques: techniques,
+      options: options,
+      status: 'running',
+      started_at: Date.now(),
+      progress: 0,
+      phases: ENHANCED_SCAN_PHASES,
+      current_phase: 0,
+      current_subphase: 0,
+      current_phase_name: ENHANCED_SCAN_PHASES[0].name,
+      current_subphase_name: ENHANCED_SCAN_PHASES[0].subphases[0],
+      findings: {
+        subdomains: [],
+        technologies: [],
+        vulnerabilities: [],
+        screenshots: [],
+        ports: []
+      }
+    }
+
+    // Start enhanced background simulation
+    simulateEnhancedSudomyScan(scanId, cleanDomain, profile, techniques, options);
+
+    res.json({
+      success: true,
+      message: `Enhanced Sudomy scan started for ${cleanDomain}`,
+      scan_id: scanId,
+      domain: cleanDomain,
+      profile: profile,
+      phases: ENHANCED_SCAN_PHASES.length,
+      estimated_duration: getEstimatedDuration(profile)
+    });
+
+  } catch (error) {
+    logger.info(`💥 [ENHANCED-SUDOMY] CRITICAL ERROR: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      message: `Error starting enhanced scan: ${error.message}`
+    });
+  }
+});
+
+// Get enhanced scan progress with detailed phase information
+router.get('/enhanced/:scanId/progress', async (req, res) => {
+  try {
+    const { scanId } = req.params
+
+    if (activeScans[scanId]) {
+      const scanData = activeScans[scanId]
+      const progressData = {
+        scan_id: scanId,
+        status: scanData.status || 'running',
+        progress: scanData.progress || 0,
+        current_phase: scanData.current_phase || 0,
+        current_subphase: scanData.current_subphase || 0,
+        current_phase_name: scanData.current_phase_name || 'Initializing',
+        current_subphase_name: scanData.current_subphase_name || '',
+        target: scanData.target || '',
+        profile: scanData.profile || 'comprehensive',
+        started_at: scanData.started_at || '',
+        estimated_completion: getEstimatedDuration(scanData.profile),
+        findings_summary: {
+          subdomains: scanData.findings?.subdomains?.length || 0,
+          technologies: scanData.findings?.technologies?.length || 0,
+          vulnerabilities: scanData.findings?.vulnerabilities?.length || 0,
+          screenshots: scanData.findings?.screenshots?.length || 0,
+          ports: scanData.findings?.ports?.length || 0
+        }
+      }
+
+      return res.json(progressData);
+    }
+
+    // Check completed scans
+    if (reconResults[scanId]) {
+      const resultData = reconResults[scanId]
+      return res.json({
+        scan_id: scanId,
+        status: 'completed',
+        progress: 100,
+        current_phase: ENHANCED_SCAN_PHASES.length - 1,
+        current_phase_name: 'Completed',
+        target: resultData.target || '',
+        completed_at: resultData.completed_at || '',
+        findings_summary: {
+          subdomains: (resultData.subdomains_found || []).length,
+          technologies: (resultData.technologies || []).length,
+          vulnerabilities: (resultData.vulnerabilities || []).length,
+          screenshots: resultData.screenshots_captured || 0,
+          ports: (resultData.ports_scanned || []).length
+        }
+      });
+    }
+
+    res.status(404).json({
+      error: 'Enhanced scan not found',
+      scan_id: scanId
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+      scan_id: req.params.scanId
+    });
+  }
+});
+
+// Get detailed scan results with enhanced data
+router.get('/enhanced/:scanId/results', async (req, res) => {
+  try {
+    const { scanId } = req.params
+
+    if (reconResults[scanId]) {
+      const results = reconResults[scanId]
+      return res.json({
+        success: true,
+        scan_id: scanId,
+        results: {
+          ...results,
+          analysis: {
+            risk_score: calculateRiskScore(results),
+            threat_level: determineThreatLevel(results),
+            recommendations: generateRecommendations(results)
+          }
+        }
+      });
+    }
+
+    res.status(404).json({
+      success: false,
+      error: 'Enhanced scan results not found',
+      scan_id: scanId
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      scan_id: req.params.scanId
+    });
+  }
+});
+
+// Enhanced simulation function
+async function simulateEnhancedSudomyScan(scanId, domain, profile, techniques, options) {
+  try {
+    logger.info(`🔄 [ENHANCED-SUDOMY-${scanId}] Starting enhanced simulation`);
+
+    const phases = ENHANCED_SCAN_PHASES
+    let totalSubphases = phases.reduce((sum, phase) => sum + phase.subphases.length, 0);
+    let completedSubphases = 0;
+
+    for (let phaseIndex = 0; phaseIndex < phases.length; phaseIndex++) {
+      const phase = phases[phaseIndex]
+
+      if (activeScans[scanId]) {
+        activeScans[scanId].current_phase = phaseIndex
+        activeScans[scanId].current_phase_name = phase.name
+      }
+
+      for (let subphaseIndex = 0; subphaseIndex < phase.subphases.length; subphaseIndex++) {
+        const subphase = phase.subphases[subphaseIndex]
+
+        // Wait between subphases
+        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+
+        if (activeScans[scanId]) {
+          activeScans[scanId].current_subphase = subphaseIndex
+          activeScans[scanId].current_subphase_name = subphase
+
+          completedSubphases++;
+          const progress = Math.round((completedSubphases / totalSubphases) * 100);
+          activeScans[scanId].progress = progress
+
+          // Simulate findings during different phases
+          simulatePhaseFindings(scanId, phaseIndex, subphaseIndex, domain);
+
+          logger.info(`🔧 [ENHANCED-SUDOMY-${scanId}] Phase ${phaseIndex + 1}/${phases.length}: ${phase.name} - ${subphase} (${progress}%);`);
+        }
+      }
+    }
+
+    // Generate comprehensive results
+    const enhancedResults = generateEnhancedResults(scanId, domain, profile);
+
+    // Store results
+    reconResults[scanId] = enhancedResults
+
+    // Add to scan history
+    scanHistory.push({
+      scan_id: scanId,
+      target: domain,
+      type: 'enhanced_sudomy_recon',
+      profile: profile,
+      status: 'completed',
+      completed: new Date().toISOString(),
+      subdomains_found: enhancedResults.subdomains_found?.length || 0,
+      technologies_found: enhancedResults.technologies?.length || 0,
+      vulnerabilities_found: enhancedResults.vulnerabilities?.length || 0,
+      screenshots_captured: enhancedResults.screenshots_captured || 0,
+      ports_scanned: enhancedResults.ports_scanned?.length || 0,
+      scan_type: 'enhanced_sudomy_recon'
+    });
+
+    // Remove from active scans
+    delete activeScans[scanId]
+
+    logger.info(`✅ [ENHANCED-SUDOMY-${scanId}] Enhanced scan completed successfully`);
+
+  } catch (error) {
+    logger.info(`💥 [ENHANCED-SUDOMY-${scanId}] Enhanced simulation error: ${error.message}`);
+
+    if (activeScans[scanId]) {
+      activeScans[scanId].status = 'failed';
+      activeScans[scanId].error = error.message
+    }
+  }
+}
+
+// Simulate findings during different phases
+function simulatePhaseFindings(scanId, phaseIndex, subphaseIndex, domain) {
+  if (!activeScans[scanId]) return
+
+  const findings = activeScans[scanId].findings
+
+  switch (phaseIndex) {
+    case 1: // Passive enumeration
+      if (subphaseIndex === 0) { // Certificate Transparency
+        findings.subdomains.push(`www.${domain}`, `api.${domain}`);
+      } else if (subphaseIndex === 1) { // DNS databases
+        findings.subdomains.push(`mail.${domain}`, `ftp.${domain}`);
+      }
+      break
+
+    case 2: // Active discovery
+      if (subphaseIndex === 0) { // DNS brute force
+        findings.subdomains.push(`admin.${domain}`, `dev.${domain}`, `staging.${domain}`);
+      }
+      break
+
+    case 4: // Web technology analysis
+      findings.technologies.push(
+        { name: 'nginx', version: '1.18.0', category: 'web_server' },
+        { name: 'React', version: '17.0.2', category: 'frontend' }
+      );
+      break
+
+    case 5: // Security assessment
+      findings.vulnerabilities.push({
+        type: 'Subdomain Takeover',
+        severity: 'High',
+        subdomain: `dev.${domain}`,
+        description: 'Potential subdomain takeover vulnerability detected'
+      });
+      findings.ports.push(80, 443, 22, 21);
+      break
+
+    case 6: // Visual intelligence
+      findings.screenshots.push({
+        subdomain: `www.${domain}`,
+        url: `https://www.${domain}`,
+        screenshot_path: `/screenshots/${domain}_www.png`,
+        status_code: 200
+      });
+      break
+  }
+}
+
+// Generate comprehensive enhanced results
+function generateEnhancedResults(scanId, domain, profile) {
+  const scan = activeScans[scanId]
+  const findings = scan?.findings || {}
+
+  return {
+    scan_id: scanId,
+    target: domain,
+    profile: profile,
+    type: 'enhanced_sudomy_recon',
+    status: 'completed',
+    completed_at: new Date().toISOString(),
+
+    // Core findings
+    subdomains_found: findings.subdomains || [],
+    technologies: findings.technologies || [],
+    vulnerabilities: findings.vulnerabilities || [],
+    screenshots: findings.screenshots || [],
+    ports_scanned: findings.ports || [],
+
+    // Enhanced data
+    dns_records: generateMockDNSRecords(domain),
+    ssl_certificates: generateMockSSLData(domain),
+    security_headers: generateMockSecurityHeaders(domain),
+    threat_intelligence: generateMockThreatIntel(domain),
+
+    // Statistics
+    total_hosts: findings.subdomains?.length || 0,
+    screenshots_captured: findings.screenshots?.length || 0,
+    technologies_detected: findings.technologies?.length || 0,
+    vulnerabilities_detected: findings.vulnerabilities?.length || 0,
+
+    // Metadata
+    scan_duration: '8 minutes 32 seconds',
+    tools_used: ['subfinder', 'amass', 'httpx', 'nmap', 'nuclei'],
+    techniques_applied: Object.keys(SUDOMY_TECHNIQUES.passive).concat(
+      Object.keys(SUDOMY_TECHNIQUES.active),
+      Object.keys(SUDOMY_TECHNIQUES.validation)
+    );
+  }
+}
+
+// Helper functions for mock data generation
+function generateMockDNSRecords(domain) {
+  return [
+    { type: 'A', name: domain, value: '93.184.216.34', ttl: 3600 },
+    { type: 'AAAA', name: domain, value: '2606:2800:220:1:248:1893:25c8:1946', ttl: 3600 },
+    { type: 'MX', name: domain, value: 'mail.example.com', priority: 10, ttl: 3600 },
+    { type: 'TXT', name: domain, value: 'v=spf1 include:_spf.google.com ~all', ttl: 3600 }
+  ]
+}
+
+function generateMockSSLData(domain) {
+  return {
+    certificate: {
+      subject: `CN=${domain}`,
+      issuer: 'DigiCert Inc',
+      valid_from: '2023-01-01T00:00:00Z',
+      valid_to: '2024-01-01T00:00:00Z',
+      serial_number: '0x1234567890abcdef',
+      signature_algorithm: 'SHA256-RSA'
+    },
+    ssl_grade: 'A+',
+    vulnerabilities: [],
+    cipher_suites: ['TLS_AES_256_GCM_SHA384', 'TLS_CHACHA20_POLY1305_SHA256']
+  }
+}
+
+function generateMockSecurityHeaders(domain) {
+  return {
+    'strict-transport-security': 'max-age=31536000; includeSubDomains',
+    'content-security-policy': 'default-src 'self'',
+    'x-frame-options': 'DENY',
+    'x-content-type-options': 'nosniff',
+    'referrer-policy': 'strict-origin-when-cross-origin'
+  }
+}
+
+function generateMockThreatIntel(domain) {
+  return {
+    reputation_score: 95,
+    threat_categories: [],
+    malware_detected: false,
+    phishing_detected: false,
+    last_seen_malicious: null,
+    threat_feeds: ['VirusTotal', 'URLVoid', 'Hybrid Analysis']
+  }
+}
+
+function calculateRiskScore(results) {
+  let score = 0;
+
+  // Vulnerabilities impact
+  const vulns = results.vulnerabilities || []
+  score += vulns.filter(v => v.severity === 'High').length * 30;
+  score += vulns.filter(v => v.severity === 'Medium').length * 15;
+  score += vulns.filter(v => v.severity === 'Low').length * 5;
+
+  // Subdomain exposure
+  const subdomains = results.subdomains_found || []
+  if (subdomains.length > 50) score += 20;
+  else if (subdomains.length > 20) score += 10;
+
+  return Math.min(score, 100);
+}
+
+function determineThreatLevel(results) {
+  const riskScore = calculateRiskScore(results);
+
+  if (riskScore >= 70) return 'High';
+  if (riskScore >= 40) return 'Medium';
+  if (riskScore >= 20) return 'Low';
+  return 'Minimal';
+}
+
+function generateRecommendations(results) {
+  const recommendations = []
+
+  const vulns = results.vulnerabilities || []
+  if (vulns.some(v => v.severity === 'High')) {
+    recommendations.push('Immediately address high-severity vulnerabilities');
+  }
+
+  const subdomains = results.subdomains_found || []
+  if (subdomains.length > 30) {
+    recommendations.push('Review subdomain inventory and disable unused services');
+  }
+
+  recommendations.push('Implement continuous monitoring for new subdomains');
+  recommendations.push('Regular security assessments and penetration testing');
+
+  return recommendations
+}
+
+function getEstimatedDuration(profile) {
+  const durations = {
+    quick: '2-5 minutes',
+    comprehensive: '15-30 minutes',
+    stealth: '5-10 minutes',
+    aggressive: '20-45 minutes'
+  }
+
+  return durations[profile] || '10-20 minutes';
+}
+
+module.exports = router

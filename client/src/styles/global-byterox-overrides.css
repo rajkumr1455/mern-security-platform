@@ -1,0 +1,369 @@
+/* Global Byterox Theme Overrides for All Existing Components */
+
+/* Override all existing components to use Byterox theme */
+.MuiPaper-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  backdrop-filter: blur(15px) !important;
+}
+
+.MuiCard-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  backdrop-filter: blur(15px) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.25) !important;
+  border-color: rgba(139, 92, 246, 0.6) !important;
+}
+
+.MuiCardHeader-root {
+  background: linear-gradient(135deg, #2d1b69 0%, #1a1b2e 100%) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiCardContent-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  color: #ffffff !important;
+}
+
+.MuiTypography-root {
+  color: #ffffff !important;
+}
+
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3,
+.MuiTypography-h4,
+.MuiTypography-h5,
+.MuiTypography-h6 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.MuiButton-root {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-radius: 12px !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.MuiButton-root:hover {
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.MuiButton-outlined {
+  background: transparent !important;
+  border: 2px solid #8b5cf6 !important;
+  color: #8b5cf6 !important;
+}
+
+.MuiButton-outlined:hover {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root fieldset {
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgba(139, 92, 246, 0.6) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
+}
+
+.MuiTextField-root .MuiInputLabel-root {
+  color: #e2e8f0 !important;
+}
+
+.MuiTextField-root .MuiInputLabel-root.Mui-focused {
+  color: #8b5cf6 !important;
+}
+
+.MuiTextField-root input {
+  color: #ffffff !important;
+}
+
+.MuiTextField-root input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.MuiTableContainer-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(15px) !important;
+}
+
+.MuiTable-root {
+  background: transparent !important;
+}
+
+.MuiTableHead-root {
+  background: linear-gradient(135deg, #2d1b69 0%, #1a1b2e 100%) !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-size: 0.75rem !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiTableBody-root .MuiTableCell-root {
+  color: #e2e8f0 !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiTableRow-root:hover .MuiTableCell-root {
+  background: rgba(139, 92, 246, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.MuiChip-root {
+  background: rgba(139, 92, 246, 0.2) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(139, 92, 246, 0.4) !important;
+  font-weight: 600 !important;
+}
+
+.MuiChip-colorPrimary {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.1)) !important;
+  color: #a855f7 !important;
+  border-color: #a855f7 !important;
+}
+
+.MuiChip-colorSecondary {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(34, 211, 238, 0.1)) !important;
+  color: #06b6d4 !important;
+  border-color: #06b6d4 !important;
+}
+
+.MuiChip-colorSuccess {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)) !important;
+  color: #10b981 !important;
+  border-color: #10b981 !important;
+}
+
+.MuiChip-colorError {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1)) !important;
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
+
+.MuiChip-colorWarning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1)) !important;
+  color: #f59e0b !important;
+  border-color: #f59e0b !important;
+}
+
+.MuiDialog-paper {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(25px) !important;
+  box-shadow: 0 16px 48px rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiDialogTitle-root {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiDialogContent-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  color: #ffffff !important;
+}
+
+.MuiDialogActions-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border-top: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiLinearProgress-root {
+  background: rgba(139, 92, 246, 0.2) !important;
+  border-radius: 12px !important;
+  height: 8px !important;
+  overflow: hidden !important;
+}
+
+.MuiLinearProgress-bar {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4) !important;
+}
+
+.MuiCircularProgress-root {
+  color: #8b5cf6 !important;
+}
+
+.MuiAlert-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(15px) !important;
+  color: #ffffff !important;
+}
+
+.MuiAlert-standardSuccess {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.MuiAlert-standardError {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05)) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.MuiAlert-standardWarning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05)) !important;
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+}
+
+.MuiAlert-standardInfo {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(34, 211, 238, 0.05)) !important;
+  border-color: #06b6d4 !important;
+  color: #06b6d4 !important;
+}
+
+.MuiAccordion-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(15px) !important;
+  margin-bottom: 1rem !important;
+}
+
+.MuiAccordion-root:hover {
+  border-color: rgba(139, 92, 246, 0.6) !important;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiAccordionSummary-root {
+  background: linear-gradient(135deg, #2d1b69 0%, #1a1b2e 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.MuiAccordionSummary-root:hover {
+  background: linear-gradient(135deg, #8b5cf6 0%, #2d1b69 100%) !important;
+}
+
+.MuiAccordionDetails-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  color: #e2e8f0 !important;
+}
+
+.MuiTabs-root {
+  background: rgba(26, 27, 46, 0.95) !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.MuiTab-root {
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.MuiTab-root.Mui-selected {
+  color: #8b5cf6 !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.MuiTabs-indicator {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+  height: 3px !important;
+  border-radius: 2px !important;
+}
+
+/* Custom scrollbar for all components */
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: #8b5cf6 #1a1b2e !important;
+}
+
+*::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1a1b2e !important;
+  border-radius: 4px !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7) !important;
+  border-radius: 4px !important;
+  border: 2px solid #2d1b69 !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a855f7, #c084fc) !important;
+}
+
+/* Force text colors for all elements */
+h1, h2, h3, h4, h5, h6, p, span, div, li, td, th, label, a, button {
+  color: #ffffff !important;
+}
+
+/* Ensure proper contrast for form elements */
+input, textarea, select {
+  background: rgba(26, 27, 46, 0.95) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Override any remaining light theme elements */
+.bg-white, .bg-light {
+  background: rgba(26, 27, 46, 0.95) !important;
+}
+
+.text-dark, .text-black {
+  color: #ffffff !important;
+}
+
+.border, .border-light {
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Ensure all cards and containers use dark theme */
+.card, .container, .row, .col {
+  background: transparent !important;
+  color: #ffffff !important;
+}

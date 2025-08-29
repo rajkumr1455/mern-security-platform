@@ -1,0 +1,451 @@
+/* Hybrid Cybersecurity Theme - Combining Light Grey Blue with Modern Security Aesthetics */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Enhanced CSS Variables - Hybrid Theme */
+:root {
+  /* Base Light Grey Blue (Your Current Theme) */
+  --bg-primary: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.95);
+  
+  /* Enhanced Cybersecurity Accents */
+  --cyber-primary: #0066cc;
+  --cyber-secondary: #00d4ff;
+  --cyber-accent: #00ff88;
+  --cyber-warning: #ff6b35;
+  --cyber-danger: #ff3366;
+  --cyber-success: #00ff88;
+  
+  /* Advanced Text Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-accent: #0066cc;
+  --text-cyber: #00d4ff;
+  --text-success: #059669;
+  --text-warning: #d97706;
+  --text-danger: #dc2626;
+  
+  /* Cybersecurity Gradients */
+  --gradient-cyber-primary: linear-gradient(135deg, #0066cc 0%, #00d4ff 100%);
+  --gradient-cyber-success: linear-gradient(135deg, #00ff88 0%, #059669 100%);
+  --gradient-cyber-warning: linear-gradient(135deg, #ff6b35 0%, #d97706 100%);
+  --gradient-cyber-danger: linear-gradient(135deg, #ff3366 0%, #dc2626 100%);
+  --gradient-cyber-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  
+  /* Advanced Shadows with Glow Effects */
+  --shadow-cyber-sm: 0 2px 8px rgba(0, 102, 204, 0.15);
+  --shadow-cyber-md: 0 4px 16px rgba(0, 102, 204, 0.2);
+  --shadow-cyber-lg: 0 8px 32px rgba(0, 102, 204, 0.25);
+  --shadow-cyber-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+  --shadow-success-glow: 0 0 20px rgba(0, 255, 136, 0.3);
+  --shadow-danger-glow: 0 0 20px rgba(255, 51, 102, 0.3);
+  
+  /* Advanced Border Effects */
+  --border-cyber: 1px solid rgba(0, 212, 255, 0.3);
+  --border-cyber-glow: 1px solid rgba(0, 212, 255, 0.6);
+  --border-success: 1px solid rgba(0, 255, 136, 0.3);
+  --border-danger: 1px solid rgba(255, 51, 102, 0.3);
+  
+  /* Animation Variables */
+  --transition-cyber: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-glow: all 0.5s ease-in-out;
+  
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* Enhanced Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--text-primary) !important;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-primary);
+  background: var(--bg-primary);
+  color: var(--text-primary) !important;
+  line-height: 1.6;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Cybersecurity Enhanced Navigation */
+.cyber-navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: var(--border-cyber);
+  box-shadow: var(--shadow-cyber-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-cyber-primary);
+  animation: cyber-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes cyber-pulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Enhanced Cybersecurity Cards */
+.cyber-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: var(--shadow-cyber-sm);
+  transition: var(--transition-cyber);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-cyber-primary);
+  opacity: 0;
+  transition: var(--transition-cyber);
+}
+
+.cyber-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-cyber-lg);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.cyber-card:hover::before {
+  opacity: 1;
+}
+
+/* Status Indicator Cards */
+.status-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-cyber);
+}
+
+.status-card.success {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+  border: var(--border-success);
+}
+
+.status-card.warning {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+}
+
+.status-card.danger {
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border: var(--border-danger);
+}
+
+.status-card.info {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 102, 204, 0.05) 100%);
+  border: var(--border-cyber);
+}
+
+/* Enhanced Buttons with Cybersecurity Aesthetics */
+.cyber-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: var(--transition-cyber);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+}
+
+.cyber-btn-primary {
+  background: var(--gradient-cyber-primary);
+  color: white !important;
+  box-shadow: var(--shadow-cyber-sm);
+}
+
+.cyber-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-cyber-glow);
+}
+
+.cyber-btn-success {
+  background: var(--gradient-cyber-success);
+  color: white !important;
+}
+
+.cyber-btn-success:hover {
+  box-shadow: var(--shadow-success-glow);
+}
+
+.cyber-btn-danger {
+  background: var(--gradient-cyber-danger);
+  color: white !important;
+}
+
+.cyber-btn-danger:hover {
+  box-shadow: var(--shadow-danger-glow);
+}
+
+/* Cybersecurity Data Tables */
+.cyber-table {
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-cyber-sm);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.cyber-table th {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  padding: 1rem;
+  border-bottom: var(--border-cyber);
+}
+
+.cyber-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+  color: var(--text-primary) !important;
+}
+
+.cyber-table tr:hover {
+  background: rgba(0, 212, 255, 0.02);
+}
+
+/* Security Status Badges */
+.security-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid;
+}
+
+.security-badge.critical {
+  background: rgba(255, 51, 102, 0.1);
+  color: var(--cyber-danger) !important;
+  border-color: var(--cyber-danger);
+  box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
+}
+
+.security-badge.high {
+  background: rgba(255, 107, 53, 0.1);
+  color: var(--cyber-warning) !important;
+  border-color: var(--cyber-warning);
+}
+
+.security-badge.medium {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--cyber-secondary) !important;
+  border-color: var(--cyber-secondary);
+}
+
+.security-badge.low {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--cyber-success) !important;
+  border-color: var(--cyber-success);
+}
+
+.security-badge.secure {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--cyber-success) !important;
+  border-color: var(--cyber-success);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+/* Enhanced Forms */
+.cyber-form-control {
+  background: var(--bg-card);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary) !important;
+  font-family: var(--font-primary);
+  transition: var(--transition-cyber);
+}
+
+.cyber-form-control:focus {
+  outline: none;
+  border-color: var(--cyber-secondary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  background: white;
+}
+
+/* Code Blocks for Security Reports */
+.cyber-code {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: var(--cyber-secondary) !important;
+  font-family: var(--font-mono);
+  padding: 1rem;
+  border-radius: 8px;
+  border: var(--border-cyber);
+  position: relative;
+  overflow-x: auto;
+}
+
+.cyber-code::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-cyber-primary);
+}
+
+/* Progress Bars for Scans */
+.cyber-progress {
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 8px;
+  position: relative;
+}
+
+.cyber-progress-bar {
+  height: 100%;
+  background: var(--gradient-cyber-primary);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.cyber-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: cyber-scan 2s linear infinite;
+}
+
+@keyframes cyber-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Enhanced Modals */
+.cyber-modal {
+  background: var(--bg-card);
+  border: var(--border-cyber);
+  border-radius: 16px;
+  box-shadow: var(--shadow-cyber-lg);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-cyber-primary);
+}
+
+/* Notification Enhancements */
+.cyber-notification {
+  background: var(--bg-card);
+  border: var(--border-cyber);
+  border-radius: 12px;
+  box-shadow: var(--shadow-cyber-md);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-notification.success {
+  border-color: var(--cyber-success);
+  box-shadow: var(--shadow-success-glow);
+}
+
+.cyber-notification.danger {
+  border-color: var(--cyber-danger);
+  box-shadow: var(--shadow-danger-glow);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .cyber-card {
+    margin-bottom: 1rem;
+  }
+  
+  .cyber-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cyber-table {
+    font-size: 0.875rem;
+  }
+}
+
+/* Dark Mode Toggle Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: rgba(30, 41, 59, 0.95);
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .cyber-card {
+    border-width: 2px;
+  }
+  
+  .cyber-btn {
+    border: 2px solid currentColor;
+  }
+  
+  .security-badge {
+    border-width: 2px;
+  }
+}

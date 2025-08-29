@@ -1,0 +1,70 @@
+{
+  "name": "security-platform-mern",
+  "version": "2.0.0",
+  "description": "Advanced Security Platform with Beautiful UI & Web2 Security - MERN Stack",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "install-server": "cd server && npm install",
+    "install-client": "cd client && npm install",
+    "install-all": "npm install && npm run install-server && npm run install-client",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start:prod": "npm run build && npm run start",
+    "test": "node scripts/run-tests.js all",
+    "test:unit": "node scripts/run-tests.js unit",
+    "test:integration": "node scripts/run-tests.js integration",
+    "test:e2e": "node scripts/run-tests.js e2e",
+    "test:client": "node scripts/run-tests.js client",
+    "test:server": "cd server && npm test",
+    "test:watch": "cd server && npm run test:watch",
+    "test:coverage": "node scripts/run-tests.js all --coverage",
+    "clean": "rm -rf client/build && rm -rf server/dist && rm -rf coverage",
+    "docker:build": "docker-compose -f docker-compose.mern.yml build",
+    "docker:up": "docker-compose -f docker-compose.mern.yml up",
+    "docker:down": "docker-compose -f docker-compose.mern.yml down",
+    "setup": "npm run install-all && echo 'Setup complete! Run npm run dev to start development servers.'",
+    "lint": "cd server && npm run lint && cd ../client && npm run lint",
+    "lint:fix": "cd server && npm run lint:fix && cd ../client && npm run lint:fix"
+  },
+  "keywords": [
+    "security",
+    "penetration-testing",
+    "vulnerability-scanning",
+    "web2-security",
+    "web3",
+    "defi",
+    "mern",
+    "react",
+    "nodejs",
+    "mongodb",
+    "express",
+    "cybersecurity",
+    "modern-ui",
+    "glass-morphism",
+    "security-tools"
+  ],
+  "author": "Security Platform Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/security-platform/mern-stack"
+  },
+  "bugs": {
+    "url": "https://github.com/security-platform/mern-stack/issues"
+  },
+  "homepage": "https://github.com/security-platform/mern-stack#readme",
+  "dependencies": {
+    "axios": "^1.11.0"
+  }
+}
